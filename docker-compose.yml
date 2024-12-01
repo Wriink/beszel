@@ -1,9 +1,13 @@
 services:
-  beszel:
-    image: 'henrygd/beszel'
-    container_name: 'beszel'
+  beszel-agent:
+    image: "henrygd/beszel-agent"
+    container_name: "beszel-agent"
     restart: unless-stopped
-    ports:
-      - '8090:8090'
+    network_mode: host
     volumes:
-      - ./beszel_data:/beszel_data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # monitor other disks / partitions by mounting a folder in /extra-filesystems
+      # - /mnt/disk/.beszel:/extra-filesystems/sda1:ro
+    environment:
+      PORT: 45876
+      KEY: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPvoakN5XGrNUgqxKWwA0HTZbrQP510tv3bJJe4qrddv"
